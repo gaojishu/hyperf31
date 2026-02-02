@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests;
+namespace HyperfTest;
 
 use PHPUnit\Framework\TestCase as BaseTestCase;
 
