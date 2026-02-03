@@ -24,7 +24,7 @@ class AdminAuthTest extends TestCase
     {
         // 错误参数
         $response = $this->post('/admin/auth/login', [
-            'username' => 'ad23',
+            'username' => '中文中文中文中文',
             'password' => '111111Aaa.',
         ]);
 
