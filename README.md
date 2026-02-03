@@ -1,6 +1,16 @@
 # Introduction
 
-This is a skeleton application using the Hyperf framework. This application is meant to be used as a starting place for those looking to get their feet wet with Hyperf Framework.
+生成环境
+php bin/hyperf.php start
+
+开发环境
+php bin/hyperf.php server:watch
+
+测试
+composer test 全部
+composer test test/Cases 指定目录
+composer test test/Cases/ExampleTest.php 指定文件
+
 
 # Requirements
 
