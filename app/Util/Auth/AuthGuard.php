@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Util\Auth;
 
 use App\Model\Admin\Admin;
+use Carbon\Carbon;
 use Hyperf\Context\Context;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\Redis\Redis;
@@ -28,7 +29,7 @@ class AuthGuard
 
     ) {}
 
-    public function generateToken(int $userId, int $ttl = 3600): string
+    public function generateToken(int $userId, int $ttl = 3600): array
     {
         $token = Uuid::uuid4()->toString();
         $redis = $this->redis;
@@ -46,7 +47,12 @@ class AuthGuard
         $redis->setex($tokenKey, $ttl, $userId);
         $redis->setex($userTokenKey, $ttl, $token);
 
-        return $token;
+        return [
+            'token' => $token,
+            'expire' => Carbon::now()->timestamp + $ttl,
+            'header' => 'Authorization',
+            'prefix' => 'Bearer',
+        ];
     }
 
     public function getUserIdByToken(string $token): ?int
