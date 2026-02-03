@@ -1,6 +1,5 @@
 <?php
 
-declare(strict_types=1);
 /**
  * This file is part of Hyperf.
  *
@@ -10,11 +9,10 @@ declare(strict_types=1);
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
 
+use Hyperf\HttpServer\Router\Router;
 
+Router::addRoute(['GET', 'POST', 'HEAD'], '/', 'App\Controller\IndexController@index');
 
-$routeDir = BASE_PATH . '/routes';
-if (is_dir($routeDir)) {
-    foreach (glob($routeDir . '/*.php') as $file) {
-        require_once $file;
-    }
-}
+Router::get('/favicon.ico', function () {
+    return '';
+});

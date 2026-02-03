@@ -10,11 +10,15 @@ declare(strict_types=1);
  * @license  https://github.com/hyperf/hyperf/blob/master/LICENSE
  */
 
+namespace App\Controller\Admin;
 
+use Hyperf\HttpServer\Annotation\AutoController;
 
-$routeDir = BASE_PATH . '/routes';
-if (is_dir($routeDir)) {
-    foreach (glob($routeDir . '/*.php') as $file) {
-        require_once $file;
+#[AutoController()]
+class IndexController extends BaseController
+{
+    public function index()
+    {
+        return $this->setData(['aaa'])->apisucceed();
     }
 }
