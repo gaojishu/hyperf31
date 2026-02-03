@@ -22,7 +22,25 @@ class AdminAuthTest extends TestCase
 {
     public function testLoginPost()
     {
-        // 执行 POST 请求并获取响应对象
+        // 错误参数
+        $response = $this->post('/admin/auth/login', [
+            'username' => 'ad23',
+            'password' => '111111Aaa.',
+        ]);
+
+
+        var_dump('http code:' . $response->getStatusCode());
+        // 获取返回的 JSON 数据（自动 decode 为数组）
+        $data = $response->json();
+
+        var_dump('http body:');
+        // 示例：打印整个响应
+        var_dump($data);
+
+        // 断言响应是否成功（可选）
+        $response->assertOk(); // 等价于 assertStatus(200)
+
+        // 正常参数
         $response = $this->post('/admin/auth/login', [
             'username' => 'admin123',
             'password' => 'Aa123321.',
