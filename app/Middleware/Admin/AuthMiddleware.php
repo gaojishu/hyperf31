@@ -2,11 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Middleware;
+namespace App\Middleware\Admin;
 
 use App\Exception\BusinessException;
 use App\Util\Auth\Auth;
-use Hyperf\Context\Context;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -39,12 +38,7 @@ class AuthMiddleware implements MiddlewareInterface
             throw new BusinessException(401, 'Invalid or expired token.');
         }
 
-        // ✅ 使用新请求对象
-        $request = $request->withAttribute('user_id', $userId);
-
-        // ✅ 同时写入 Context
-        Context::set('user_id', $userId);
-
+        //token验证通过 放行
 
         return $handler->handle($request);
     }

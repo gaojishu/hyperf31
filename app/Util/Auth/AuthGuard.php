@@ -29,7 +29,7 @@ class AuthGuard
 
     ) {}
 
-    public function generateToken(int $userId, int $ttl = 3600): array
+    public function generateToken(int $userId, int $ttl = 3600 * 24 * 30): array
     {
         $token = Uuid::uuid4()->toString();
         $redis = $this->redis;
@@ -88,16 +88,6 @@ class AuthGuard
         }
 
         return (bool) $redis->del($tokenKey);
-    }
-
-    public function setUser(mixed $user): void
-    {
-        Context::set("auth_user_{$this->guard}", $user);
-    }
-
-    public function user(): mixed
-    {
-        return Context::get("auth_user_{$this->guard}");
     }
 
     // --- Helper Methods ---

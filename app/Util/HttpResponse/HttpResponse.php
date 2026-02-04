@@ -2,7 +2,9 @@
 
 namespace App\Util\HttpResponse;
 
+use App\Util\Auth\Auth;
 use Hyperf\Context\Context;
+use Hyperf\HttpServer\Contract\RequestInterface;
 use Hyperf\HttpServer\Contract\ResponseInterface;
 use Ramsey\Uuid\Uuid;
 
@@ -14,9 +16,10 @@ trait HttpResponse
     private $responseData = [
         'code' => 500,
         'success' => false,
-        'message' => 'fail',
+        'message' => '',
         'reqId' => '',
         'data' => null,
+        'httpStatus' => 'fail'
     ];
 
     /**
@@ -26,9 +29,31 @@ trait HttpResponse
      */
     protected ResponseInterface $response;
 
+    /**
+     * 必须由使用该 Trait 的类提供 Response 实例
+     *
+     * @var RequestInterface
+     */
+    protected RequestInterface $request;
+
+
     public function admin_id()
     {
-        return Context::get('user_id');
+        $authorization = $this->request->getHeaderLine('Authorization');
+        $token = null;
+
+        if (str_starts_with($authorization, 'Bearer ')) {
+            $token = substr($authorization, 7);
+        }
+
+        if (! $token) {
+            $token = $this->request->getQueryParams()['token'] ?? null;
+        }
+
+        if (! $token) {
+            return null;
+        }
+        return Auth::guard(Auth::GUARD_ADMIN)->getUserIdByToken($token);
     }
 
     protected function getReqId(): string
@@ -36,11 +61,12 @@ trait HttpResponse
         return Context::getOrSet('req_id', fn() => Uuid::uuid4()->toString());
     }
 
-    public function apisucceed(string $message = '操作成功')
+    public function apisucceed(string $message = '')
     {
         $this->responseData['message'] = $message;
         $this->responseData['success'] = true;
         $this->responseData['code'] = 0;
+        $this->responseData['httpStatus'] = 'ok';
         $this->responseData['reqId'] = $this->getReqId();
 
         return $this->response->json($this->responseData);
@@ -52,6 +78,7 @@ trait HttpResponse
         $this->responseData['code'] = $code;
         $this->responseData['success'] = false;
         $this->responseData['reqId'] = $this->getReqId();
+        $this->responseData['httpStatus'] = 'fail';
 
         return $this->response->json($this->responseData);
     }
@@ -62,25 +89,27 @@ trait HttpResponse
         $this->responseData['code'] = $code;
         $this->responseData['success'] = false;
         $this->responseData['reqId'] = $this->getReqId();
+        $this->responseData['httpStatus'] = 'fail';
 
         return $this->responseData;
     }
 
-    public function setCode(int $code): static
+    public function setCode(int $code)
     {
         $this->responseData['code'] = $code;
         return $this;
     }
 
-    public function setMessage(string $message): static
+    public function setMessage(string $message)
     {
         $this->responseData['message'] = $message;
         return $this;
     }
 
-    public function setData(?array $data): static
+    public function setData(mixed $data)
     {
         $this->responseData['data'] = $data;
+
         return $this;
     }
 }
