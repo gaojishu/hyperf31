@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Model\Admin;
 
+use App\Enum\Admin\AdminDisabledStatusEnum;
 use App\Model\BaseModel;
 
 /**
@@ -12,7 +13,7 @@ use App\Model\BaseModel;
  * @property string $deleted_at 
  * @property \Carbon\Carbon $updated_at 
  * @property string $email 
- * @property int $disabled_status 
+ * @property AdminDisabledStatusEnum $disabled_status 
  * @property string $mobile 
  * @property string $nickname 
  * @property string $password 
@@ -34,5 +35,17 @@ class Admin extends BaseModel
     /**
      * The attributes that should be cast to native types.
      */
-    protected array $casts = ['id' => 'integer', 'created_at' => 'datetime', 'updated_at' => 'datetime', 'disabled_status' => 'integer'];
+    protected array $casts = [
+        'id' => 'integer',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+        'disabled_status' => AdminDisabledStatusEnum::class,
+        'permission_key' => 'array'
+    ];
+
+
+    public function permission()
+    {
+        return $this->belongsToMany(Permission::class, 'admin_permission',  'admin_id', 'permission_id')->orderBy('sort');
+    }
 }

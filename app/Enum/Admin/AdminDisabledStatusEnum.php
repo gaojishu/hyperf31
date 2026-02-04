@@ -28,14 +28,24 @@ enum AdminDisabledStatusEnum: int
         return array_column(self::cases(), 'value');
     }
 
+    public function toArray(): array
+    {
+        return [
+            'value' => $this->value,
+            'label' => $this->label(),
+        ];
+    }
     /**
      * 获取键值对映射 [value => label]
      */
-    public static function toArray(): array
+    public static function toArrayList(): array
     {
         $result = [];
         foreach (self::cases() as $case) {
-            $result[$case->value] = $case->label();
+            $result[] = [
+                'value' => $case->value,
+                'label' => $case->label(),
+            ];
         }
         return $result;
     }
