@@ -29,8 +29,6 @@ class GlobalExceptionHandler extends ExceptionHandler
                 ->withBody(new SwooleStream(json_encode($data, JSON_UNESCAPED_UNICODE)));
         }
 
-        var_dump('throwable instanceof:' . get_class($throwable));
-
         if ($throwable instanceof \Hyperf\Validation\ValidationException) {
             // 构造统一响应格式
             $data = $this->setData($throwable->validator->errors()->getMessages())->apidata($throwable->validator->errors()->first(), 400);
@@ -42,7 +40,8 @@ class GlobalExceptionHandler extends ExceptionHandler
                 ->withBody(new SwooleStream(json_encode($data, JSON_UNESCAPED_UNICODE)));
         }
 
-        return $this->handle($throwable, $response);
+        //DOTO : 某些异常会循环抛出，需要处理
+        //return $this->handle($throwable, $response);
     }
 
     public function isValid(Throwable $throwable): bool
