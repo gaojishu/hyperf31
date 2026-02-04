@@ -33,6 +33,7 @@ php bin/hyperf.php server:watch
 composer test 全部
 composer test test/Cases 指定目录
 composer test test/Cases/ExampleTest.php 指定文件
+composer test -- --filter=testLogin 指定方法
 ```
 
 ### 单元测试
@@ -40,5 +41,11 @@ composer test test/Cases/ExampleTest.php 指定文件
 composer test 全部
 composer test test/Unit 指定目录
 composer test test/Unit/ExampleTest.php 指定文件
+```
+
+# comand
+```
+php bin/hyperf.php gen:model permission --path=app/Model/Admin
+
 ```
 
