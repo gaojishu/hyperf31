@@ -24,8 +24,13 @@ class AdminAuthTest extends HttpTestCase
     public function testInfo()
     {
 
-        // 错误参数
-        $response = $this->request('get', '/admin/auth/info');
+
+        $response = $this->request('get', '/admin/auth/info', [
+            'query' => [
+                'token' => 'b8985250-924b-4275-9040-f02cf87dddba'
+            ]
+        ]);
+
 
         $body = $response->getBody()->getContents();
 
