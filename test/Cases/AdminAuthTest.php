@@ -13,64 +13,75 @@ declare(strict_types=1);
 namespace HyperfTest\Cases;
 
 use Hyperf\Testing\TestCase;
+use HyperfTest\HttpTestCase;
 
 /**
  * @internal
  * @coversNothing
  */
-class AdminAuthTest extends TestCase
+class AdminAuthTest extends HttpTestCase
 {
+    public function testInfo()
+    {
+
+        // 错误参数
+        $response = $this->request('get', '/admin/auth/info');
+
+        $body = $response->getBody()->getContents();
+
+        $body = json_decode($body, true);
+
+        var_dump($body);
+
+        $this->assertSame(200, $response->getStatusCode());
+    }
     public function testLoginPost()
     {
         // 错误参数
-        $response = $this->post('/admin/auth/login', [
-            'username' => '中文中文中文中文',
-            'password' => '111111Aaa.',
+        $response = $this->request('post', '/admin/auth/login', [
+            'json' => [
+                'username' => '中文中文中文中文',
+                'password' => '111111Aaa.',
+            ],
+            'headers' => [
+                'Content-Type' => 'application/json',
+            ],
         ]);
 
 
-        var_dump('http code:' . $response->getStatusCode());
-        // 获取返回的 JSON 数据（自动 decode 为数组）
-        $data = $response->json();
+        $body = $response->getBody()->getContents();
 
-        var_dump('http body:');
-        // 示例：打印整个响应
-        var_dump($data);
+        $body = json_decode($body, true);
 
-        // 断言响应是否成功（可选）
-        $response->assertOk(); // 等价于 assertStatus(200)
+        var_dump($body);
+
+        //$this->assertSame(200, $response->getStatusCode());
+
 
         // 正常参数
-        $response = $this->post('/admin/auth/login', [
-            'username' => 'admin123',
-            'password' => 'Aa123321.',
+        $response = $this->request('post', '/admin/auth/login', [
+            'json' => [
+                'username' => 'admin123',
+                'password' => 'Aa123321.',
+            ],
+            'headers' => [
+                'Content-Type' => 'application/json',
+            ],
         ]);
 
 
-        var_dump('http code:' . $response->getStatusCode());
-        // 获取返回的 JSON 数据（自动 decode 为数组）
-        $data = $response->json();
+        $body = $response->getBody()->getContents();
 
-        var_dump('http body:');
-        // 示例：打印整个响应
-        var_dump($data);
+        $body = json_decode($body, true);
+
+        var_dump($body);
+
+        $this->assertSame(200, $response->getStatusCode());
+
 
         // 示例：断言特定字段存在
         // $this->assertArrayHasKey('token', $data['data']);
         // $this->assertIsString($data['data']['token']);
-
-        // 或者直接使用 assertJson() 断言结构
-        // $response->assertJson([
-        //     'code' => 200,
-        //     'message' => '登录成功',
-        // ]);
-
-        // 如果你想获取原始字符串（非 JSON）
-        // $content = $response->getContent();
-
-
-        // 断言响应是否成功（可选）
-        $response->assertOk(); // 等价于 assertStatus(200)
 
     }
 }
