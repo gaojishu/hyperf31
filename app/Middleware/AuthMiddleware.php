@@ -14,13 +14,6 @@ use Psr\Http\Server\RequestHandlerInterface;
 
 class AuthMiddleware implements MiddlewareInterface
 {
-    protected string $guard;
-
-    // ✅ 构造函数只接收中间件参数（由路由传入）和可选容器
-    public function __construct(string $guard)
-    {
-        $this->guard = $guard;
-    }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
@@ -40,7 +33,7 @@ class AuthMiddleware implements MiddlewareInterface
             throw new BusinessException(401, 'Authorization header or query param "token" is required.');
         }
 
-        $userId = Auth::guard($this->guard)->getUserIdByToken($token);
+        $userId = Auth::guard(Auth::GUARD_ADMIN)->getUserIdByToken($token);
 
         if (! $userId) {
             throw new BusinessException(401, 'Invalid or expired token.');
