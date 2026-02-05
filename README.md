@@ -45,7 +45,7 @@ composer test test/Unit/ExampleTest.php 指定文件
 
 # comand
 ```
-php bin/hyperf.php gen:model permission --path=app/Model/Admin
+php bin/hyperf.php gen:model admin --path=app/Model/Admin
 
 ```
 
