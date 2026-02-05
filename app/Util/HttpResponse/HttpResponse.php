@@ -37,7 +37,7 @@ trait HttpResponse
     protected RequestInterface $request;
 
 
-    public function admin_id()
+    public function adminId()
     {
         $authorization = $this->request->getHeaderLine('Authorization');
         $token = null;

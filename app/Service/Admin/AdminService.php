@@ -8,15 +8,15 @@ use App\Model\Admin\Admin;
 
 class AdminService
 {
-    public function findById(?int $admin_id): ?Admin
+    public function findById(?int $adminId): ?Admin
     {
-        $admin = Admin::where('id', $admin_id)->first();
+        $admin = Admin::where('id', $adminId)->first();
         return $admin;
     }
 
-    public function findPermissionByAdminId(?int $admin_id)
+    public function findPermissionByAdminId(?int $adminId)
     {
-        $admin = Admin::find($admin_id);
+        $admin = Admin::find($adminId);
         if (! $admin) {
             return null;
         }

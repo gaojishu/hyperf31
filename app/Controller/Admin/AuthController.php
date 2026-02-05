@@ -44,8 +44,8 @@ class AuthController extends BaseController
     #[\Hyperf\HttpServer\Annotation\Middlewares([\App\Middleware\Admin\AuthMiddleware::class])]
     public function info()
     {
-        $admin_id = $this->admin_id();
-        $result = $this->adminService->findById($admin_id);
+        $adminId = $this->adminId();
+        $result = $this->adminService->findById($adminId);
 
         return $this->setData($result)->apisucceed();
     }
@@ -53,12 +53,12 @@ class AuthController extends BaseController
     #[\Hyperf\HttpServer\Annotation\Middlewares([\App\Middleware\Admin\AuthMiddleware::class])]
     public function permission()
     {
-        $admin_id = $this->admin_id();
+        $adminId = $this->adminId();
 
-        if ($admin_id == 1) {
+        if ($adminId == 1) {
             $result = $this->permissionService->findAll();
         } else {
-            $result = $this->adminService->findPermissionByAdminId($admin_id);
+            $result = $this->adminService->findPermissionByAdminId($adminId);
         }
 
         return $this->setData($result)->apisucceed();

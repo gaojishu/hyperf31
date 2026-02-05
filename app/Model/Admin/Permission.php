@@ -8,13 +8,13 @@ use App\Model\BaseModel;
 
 /**
  * @property int $id 
- * @property \Carbon\Carbon $created_at 
+ * @property \Carbon\Carbon $createdAt 
  * @property string $deleted_at 
- * @property \Carbon\Carbon $updated_at 
+ * @property \Carbon\Carbon $updatedAt 
  * @property string $icon 
  * @property int $level 
  * @property string $name 
- * @property int $parent_id 
+ * @property int $parentId 
  * @property string $path 
  * @property string $remark 
  * @property int $sort 

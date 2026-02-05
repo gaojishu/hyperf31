@@ -51,7 +51,7 @@ return [
                 'refresh_fillable' => true,
                 'table_mapping' => [],
                 'with_comments' => true,
-                'property_case' => ModelOption::PROPERTY_SNAKE_CASE,
+                'property_case' => ModelOption::PROPERTY_CAMEL_CASE,
             ],
         ],
     ],
