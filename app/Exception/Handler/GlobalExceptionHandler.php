@@ -40,8 +40,7 @@ class GlobalExceptionHandler extends ExceptionHandler
                 ->withBody(new SwooleStream(json_encode($data, JSON_UNESCAPED_UNICODE)));
         }
 
-        //DOTO : 某些异常会循环抛出，需要处理
-        //return $this->handle($throwable, $response);
+        return $response;
     }
 
     public function isValid(Throwable $throwable): bool
