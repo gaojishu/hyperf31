@@ -14,8 +14,8 @@ class CommonController extends BaseController
     public function enums()
     {
         $data = [
-            'adminDisabledStatus' => AdminDisabledStatusEnum::toArrayList(),
-            'permissionType' => PermissionTypeEnum::toArrayList(),
+            'admin_disabled_status' => AdminDisabledStatusEnum::toArrayList(),
+            'permission_type' => PermissionTypeEnum::toArrayList(),
         ];
         return $this->setData($data)->apisucceed();
     }
