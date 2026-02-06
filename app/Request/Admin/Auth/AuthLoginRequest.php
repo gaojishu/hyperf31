@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Request\Admin;
+namespace App\Request\Admin\Auth;
 
 use Hyperf\Validation\Request\FormRequest;
 use Hyperf\Validation\Rules\Password;
 
-class AdminLoginRequest extends FormRequest
+class AuthLoginRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

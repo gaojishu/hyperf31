@@ -15,7 +15,7 @@ class AdminController extends BaseController
     #[Inject()]
     private AdminService $adminService;
 
-    public function create(\App\Request\Admin\AdminCreateRequest $request)
+    public function create(\App\Request\Admin\Admin\AdminCreateRequest $request)
     {
 
         $this->adminService->create($request->validated());
@@ -23,16 +23,16 @@ class AdminController extends BaseController
         return $this->apisucceed('操作成功');
     }
 
-    public function update(\App\Request\Admin\AdminUpdateRequest $request)
+    public function update(\App\Request\Admin\Admin\AdminUpdateRequest $request)
     {
         $this->adminService->update($request->validated());
 
         return $this->apisucceed('操作成功');
     }
 
-    public function page()
+    public function page(\App\Request\Admin\Admin\AdminPageRequest $request)
     {
-        $data =  $this->adminService->page();
+        $data =  $this->adminService->page($request->validated());
         return $this->setData($data)->apisucceed();
     }
 }

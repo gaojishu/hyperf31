@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Controller\Admin;
 
-use App\Request\Admin\AdminLoginRequest;
 use App\Service\Admin\AdminService;
 use App\Service\Admin\AuthService;
 use App\Service\Admin\PermissionService;
@@ -31,7 +30,7 @@ class AuthController extends BaseController
     #[Inject()]
     private PermissionService $permissionService;
 
-    public function login(AdminLoginRequest $request)
+    public function login(\App\Request\Admin\Auth\AuthLoginRequest $request)
     {
         $data = $request->validated();
 
