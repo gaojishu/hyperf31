@@ -24,7 +24,7 @@ class GlobalExceptionHandler extends ExceptionHandler
 
             // 返回 JSON 响应
             return $response
-                ->withStatus(500) // 业务异常通常仍返回 200，由 code 判断是否成功
+                ->withStatus($throwable->getCode()) // 业务异常通常仍返回 200，由 code 判断是否成功
                 ->withHeader('Content-Type', 'application/json')
                 ->withBody(new SwooleStream(json_encode($data, JSON_UNESCAPED_UNICODE)));
         }
