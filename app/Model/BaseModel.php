@@ -6,7 +6,4 @@ namespace App\Model;
 
 use Hyperf\Database\Model\Concerns\CamelCase;
 
-class BaseModel extends Model
-{
-    use CamelCase;
-}
+class BaseModel extends Model {}

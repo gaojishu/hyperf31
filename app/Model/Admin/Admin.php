@@ -9,16 +9,16 @@ use App\Model\BaseModel;
 
 /**
  * @property int $id 
- * @property \Carbon\Carbon $createdAt 
+ * @property \Carbon\Carbon $created_t 
  * @property string $deletedAt 
- * @property \Carbon\Carbon $updatedAt 
+ * @property \Carbon\Carbon $updated_t 
  * @property string $email 
- * @property AdminDisabledStatusEnum $disabledStatus 
+ * @property AdminDisabledStatusEnum $disabled_status 
  * @property string $mobile 
  * @property string $nickname 
  * @property string $password 
  * @property string $username 
- * @property string $permissionKey 
+ * @property string $permission_key 
  * @property-read null|\Hyperf\Database\Model\Collection|Permission[] $permission 
  */
 class Admin extends BaseModel
@@ -36,6 +36,6 @@ class Admin extends BaseModel
 
     public function permission()
     {
-        return $this->belongsToMany(Permission::class, 'admin_permission',  'adminId', 'permission_id')->orderBy('sort');
+        return $this->belongsToMany(Permission::class, 'admin_permission',  'admin_id', 'permission_id')->orderBy('sort');
     }
 }
