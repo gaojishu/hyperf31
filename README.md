@@ -43,12 +43,11 @@ composer test test/Unit 指定目录
 composer test test/Unit/ExampleTest.php 指定文件
 ```
 
-# comand
+# 常用命令
 ```
 php bin/hyperf.php gen:model admin --path=app/Model/Admin
 
 php bin/hyperf.php gen:middleware CorsMiddleware
-
 
 ```
 

@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Request\Admin\Admin;
 
+use App\Enum\Admin\AdminDisabledStatusEnum;
 use Hyperf\Validation\Request\FormRequest;
+use Hyperf\Validation\Rule;
 use Hyperf\Validation\Rules\Password;
 
 class AdminCreateRequest extends FormRequest
@@ -34,10 +36,14 @@ class AdminCreateRequest extends FormRequest
                     ->numbers()
                     ->symbols()
             ],
+            'disabled_status' => [
+                'required',
+                Rule::enum(AdminDisabledStatusEnum::class)
+            ],
             'nickname' => '',
             'mobile' => '',
             'email' => '',
-            'permissionKey' => '',
+            'permission_key' => '',
         ];
     }
 
@@ -55,6 +61,8 @@ class AdminCreateRequest extends FormRequest
             'password.mixed' => '密码必须包含大小写字母',
             'password.numbers' => '密码必须包含数字',
             'password.symbols' => '密码必须包含特殊字符',
+            'disabled_status.required' => '状态不能为空',
+            'disabled_status.Hyperf\Validation\Rules\Enum' => '无效的状态值',
         ];
     }
 }

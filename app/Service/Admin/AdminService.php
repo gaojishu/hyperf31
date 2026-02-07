@@ -7,6 +7,8 @@ namespace App\Service\Admin;
 use App\Enum\Admin\SortEnum;
 use App\Exception\BusinessException;
 use App\Model\Admin\Admin;
+use App\Model\Admin\Permission;
+use Hyperf\DbConnection\Db;
 
 class AdminService
 {
@@ -60,24 +62,71 @@ class AdminService
 
     public function create(array $data)
     {
-        $admin = new Admin();
-        foreach ($data as $key => $value) {
-            $admin->$key = $value;
-        }
-        return $admin->save();
+        Db::transaction(function () use ($data) {
+
+            if (isset($data['password'])) {
+                // 使用 BCRYPT 算法进行加密
+                $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
+            }
+
+            $admin = new Admin();
+            foreach ($data as $key => $value) {
+                $admin->$key = $value;
+            }
+
+            $admin->save();
+
+            //权限绑定
+            $permission_key = $data['permission_key'] ?? null;
+            if ($permission_key) {
+                $permission_ids = [];
+                foreach ($permission_key as $val) {
+                    $key = explode('-', $val);
+                    foreach ($key as $id) {
+                        $permission_ids[] = $id;
+                    }
+                }
+                $permission_ids = array_unique($permission_ids);
+                $admin->permission()->attach($permission_ids);
+            }
+        });
     }
 
     public function update(array $data)
     {
-        $admin = Admin::where('id', $data['id'])->first();
-        if (! $admin) {
-            throw new BusinessException(500, '数据不存在');
-        }
-        unset($data['id']);
-        foreach ($data as $key => $value) {
-            $admin->$key = $value;
-        }
-        return $admin->save();
+        Db::transaction(function () use ($data) {
+
+            if (isset($data['password'])) {
+                // 使用 BCRYPT 算法进行加密
+                $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
+            }
+
+            $admin = Admin::where('id', $data['id'])->first();
+            if (! $admin) {
+                throw new BusinessException(500, '数据不存在');
+            }
+            unset($data['id']);
+            foreach ($data as $key => $value) {
+                $admin->$key = $value;
+            }
+
+            $admin->save();
+
+            //权限绑定
+            $permission_key = $data['permission_key'] ?? null;
+            if ($permission_key) {
+                $permission_ids = [];
+                foreach ($permission_key as $val) {
+                    $key = explode('-', $val);
+                    foreach ($key as $id) {
+                        $permission_ids[] = $id;
+                    }
+                }
+                $permission_ids = array_unique($permission_ids);
+                $admin->permission()->detach();
+                $admin->permission()->attach($permission_ids);
+            }
+        });
     }
 
     public function findById(?int $admin_id): ?Admin

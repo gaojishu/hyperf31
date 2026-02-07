@@ -48,7 +48,7 @@ return [
                 'force_casts' => true,
                 'inheritance' => 'BaseModel',
                 'uses' => 'App\Model\BaseModel',
-                'refresh_fillable' => true,
+                'refresh_fillable' => false,
                 'table_mapping' => [],
                 'with_comments' => true,
                 'property_case' => ModelOption::PROPERTY_SNAKE_CASE,

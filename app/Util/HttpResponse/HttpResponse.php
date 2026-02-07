@@ -10,17 +10,8 @@ use Ramsey\Uuid\Uuid;
 
 trait HttpResponse
 {
-    /**
-     * @var array 响应模板
-     */
-    private $responseData = [
-        'code' => 500,
-        'success' => false,
-        'message' => '',
-        'reqId' => '',
-        'data' => null,
-        'httpStatus' => 'fail'
-    ];
+
+    private string $contextKey = 'http_response_data';
 
     /**
      * 必须由使用该 Trait 的类提供 Response 实例
@@ -35,6 +26,27 @@ trait HttpResponse
      * @var RequestInterface
      */
     protected RequestInterface $request;
+
+
+    private function getResponseContext(): array
+    {
+        return Context::getOrSet($this->contextKey, [
+            'code' => 500,
+            'success' => false,
+            'message' => '',
+            'reqId' => Context::getOrSet('req_id', fn() => Uuid::uuid4()->toString()),
+            'data' => null,
+            'httpStatus' => 'fail'
+        ]);
+    }
+
+    /**
+     * 更新上下文中的数据
+     */
+    private function setResponseContext(array $data): void
+    {
+        Context::set($this->contextKey, $data);
+    }
 
 
     public function admin_id()
@@ -63,53 +75,61 @@ trait HttpResponse
 
     public function apisucceed(string $message = '')
     {
-        $this->responseData['message'] = $message;
-        $this->responseData['success'] = true;
-        $this->responseData['code'] = 0;
-        $this->responseData['httpStatus'] = 'ok';
-        $this->responseData['reqId'] = $this->getReqId();
 
-        return $this->response->json($this->responseData);
+        $res = $this->getResponseContext();
+        $res['code'] = 0;
+        $res['success'] = true;
+        $res['message'] = $message;
+        $res['httpStatus'] = 'ok';
+
+        return $this->response->json($res);
     }
 
-    public function apifail(string $message = '系统错误', int $code = 5000)
+    public function apifail(string $message = '系统错误', int $code = 500)
     {
-        $this->responseData['message'] = $message;
-        $this->responseData['code'] = $code;
-        $this->responseData['success'] = false;
-        $this->responseData['reqId'] = $this->getReqId();
-        $this->responseData['httpStatus'] = 'fail';
+        $res = $this->getResponseContext();
+        $res['code'] = $code;
+        $res['message'] = $message;
+        $res['success'] = false;
+        $res['httpStatus'] = 'fail';
 
-        return $this->response->json($this->responseData);
+        return $this->response->json($res)->withStatus($code);
     }
 
-    public function apidata(string $message = '系统错误', int $code = 5000)
+    public function apidata(string $message = '系统错误', int $code = 500)
     {
-        $this->responseData['message'] = $message;
-        $this->responseData['code'] = $code;
-        $this->responseData['success'] = false;
-        $this->responseData['reqId'] = $this->getReqId();
-        $this->responseData['httpStatus'] = 'fail';
 
-        return $this->responseData;
+        $res = $this->getResponseContext();
+        $res['code'] = $code;
+        $res['message'] = $message;
+        $res['success'] = false;
+        $res['httpStatus'] = 'fail';
+
+        return $res;
     }
 
     public function setCode(int $code)
     {
-        $this->responseData['code'] = $code;
+        $res = $this->getResponseContext();
+        $res['code'] = $code;
+        $this->setResponseContext($res);
+
         return $this;
     }
 
     public function setMessage(string $message)
     {
-        $this->responseData['message'] = $message;
+        $res = $this->getResponseContext();
+        $res['message'] = $message;
+        $this->setResponseContext($res);
         return $this;
     }
 
     public function setData(mixed $data)
     {
-        $this->responseData['data'] = $data;
-
+        $res = $this->getResponseContext();
+        $res['data'] = $data;
+        $this->setResponseContext($res);
         return $this;
     }
 }

@@ -10,7 +10,7 @@ use App\Model\BaseModel;
 /**
  * @property int $id 
  * @property \Carbon\Carbon $created_t 
- * @property string $deletedAt 
+ * @property string $deleted_at 
  * @property \Carbon\Carbon $updated_t 
  * @property string $email 
  * @property AdminDisabledStatusEnum $disabled_status 
@@ -18,7 +18,7 @@ use App\Model\BaseModel;
  * @property string $nickname 
  * @property string $password 
  * @property string $username 
- * @property string $permission_key 
+ * @property array $permission_key 
  * @property-read null|\Hyperf\Database\Model\Collection|Permission[] $permission 
  */
 class Admin extends BaseModel
@@ -28,10 +28,12 @@ class Admin extends BaseModel
      */
     protected ?string $table = 'admin';
 
+    protected array $hidden = ['password'];
+
     /**
      * The attributes that should be cast to native types.
      */
-    protected array $casts = ['id' => 'integer', 'created_at' => 'datetime', 'updated_at' => 'datetime', 'disabled_status' => AdminDisabledStatusEnum::class];
+    protected array $casts = ['permission_key' => 'array', 'disabled_status' => AdminDisabledStatusEnum::class];
 
 
     public function permission()

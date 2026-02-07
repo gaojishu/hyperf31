@@ -25,7 +25,6 @@ class AdminUpdateRequest extends FormRequest
         return [
             'id' => 'required',
             'password' => [
-                'required',
                 'string',
                 Password::min(8)
                     ->max(32)
@@ -37,8 +36,8 @@ class AdminUpdateRequest extends FormRequest
             'nickname' => '',
             'mobile' => '',
             'email' => '',
-            'permissionKey' => '',
-            'disabledStatus' => '',
+            'permission_key' => '',
+            'disabled_status' => '',
         ];
     }
 
