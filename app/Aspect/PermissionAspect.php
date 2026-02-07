@@ -6,27 +6,28 @@ namespace App\Aspect;
 
 use App\Annotation\PermissionAnnotation;
 use App\Exception\BusinessException;
+use App\Service\Admin\AdminActionService;
 use App\Service\Admin\AdminService;
 use App\Service\Admin\PermissionService;
 use App\Util\Auth\Auth;
-use App\Util\HttpResponse\HttpResponse;
 use Hyperf\Di\Annotation\Aspect;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\Di\Aop\AbstractAspect;
 use Hyperf\Di\Aop\ProceedingJoinPoint;
+use Hyperf\HttpServer\Contract\RequestInterface;
 use Hyperf\HttpServer\Contract\ResponseInterface;
 
 #[Aspect()]
 class PermissionAspect extends AbstractAspect
 {
 
-
     // 指定要拦截的注解
-    public array $annotations = [
-        PermissionAnnotation::class,
-    ];
+    // public array $annotations = [
+    //     PermissionAnnotation::class,
+    // ];
 
-    protected $response;
+    #[Inject]
+    protected RequestInterface $request; // 注入请求对象
 
     #[Inject()]
     private AdminService $adminService;
@@ -34,10 +35,9 @@ class PermissionAspect extends AbstractAspect
     #[Inject()]
     private PermissionService $permissionService;
 
-    public function __construct(ResponseInterface $response)
-    {
-        $this->response = $response;
-    }
+    #[Inject()]
+    private AdminActionService $adminActionService;
+
 
     public function process(ProceedingJoinPoint $proceedingJoinPoint)
     {
@@ -68,15 +68,27 @@ class PermissionAspect extends AbstractAspect
         // 这里编写实际的权限判断逻辑
         $admin_id = Auth::guard(Auth::GUARD_ADMIN)->getUserId();
 
-        //超级管理员id   不检查权限
-        if ($admin_id == 1) {
-            return true;
-        }
-
         $permission = $this->permissionService->findByCode($code);
 
         //数据库不存在此权限，正常放行
         if (!$permission) {
+            return true;
+        }
+
+        //日志   如何获取request 上下文
+        $this->adminActionService->create([
+            'admin_id' => $admin_id,
+            'duration' => 0,
+            'ip'           => $this->request->getServerParams()['remote_addr'] ?? '', // 获取 IP
+            'method'       => $this->request->getMethod(),                            // 获取请求方法
+            'uri'          => $this->request->getUri()->getPath(),                              // 获取 URI
+            'params'       => $this->request->all(),                     // 获取所有参数
+            'query_params' => $this->request->query(),                   // 获取查询参数
+            'remark'       => $permission?->name,
+        ]);
+
+        //超级管理员id   不检查权限
+        if ($admin_id == 1) {
             return true;
         }
 
@@ -85,11 +97,6 @@ class PermissionAspect extends AbstractAspect
         if (!in_array($permission->key, $admin->permission_key)) {
             return false;
         }
-        //记录访问日志
-
-
-
-
 
         return true;
     }

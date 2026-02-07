@@ -12,11 +12,14 @@ declare(strict_types=1);
 
 namespace App\Controller\Admin;
 
+use App\Middleware\Admin\AuthMiddleware;
+use App\Middleware\Admin\PermissionMiddleware;
 use App\Service\Admin\AdminService;
 use App\Service\Admin\AuthService;
 use App\Service\Admin\PermissionService;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Annotation\AutoController;
+use Hyperf\HttpServer\Annotation\Middlewares;
 
 #[AutoController()]
 class AuthController extends BaseController
@@ -40,7 +43,7 @@ class AuthController extends BaseController
     }
 
 
-    #[\Hyperf\HttpServer\Annotation\Middlewares([\App\Middleware\Admin\AuthMiddleware::class])]
+    #[Middlewares([AuthMiddleware::class, PermissionMiddleware::class])]
     public function info()
     {
         $admin_id = $this->admin_id();
@@ -49,7 +52,7 @@ class AuthController extends BaseController
         return $this->setData($result)->apisucceed();
     }
 
-    #[\Hyperf\HttpServer\Annotation\Middlewares([\App\Middleware\Admin\AuthMiddleware::class])]
+    #[Middlewares([AuthMiddleware::class, PermissionMiddleware::class])]
     public function permission()
     {
         $admin_id = $this->admin_id();

@@ -4,14 +4,17 @@ declare(strict_types=1);
 
 namespace App\Controller\Admin;
 
+use App\Middleware\Admin\AuthMiddleware;
+use App\Middleware\Admin\PermissionMiddleware;
 use App\Request\Admin\Role\RoleStoreRequest;
 use App\Service\Admin\RoleService;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Annotation\AutoController;
+use Hyperf\HttpServer\Annotation\Middlewares;
 use Hyperf\HttpServer\Contract\RequestInterface;
 
 #[AutoController()]
-#[\Hyperf\HttpServer\Annotation\Middlewares([\App\Middleware\Admin\AuthMiddleware::class])]
+#[Middlewares([AuthMiddleware::class, PermissionMiddleware::class])]
 class RoleController extends BaseController
 {
     #[Inject()]

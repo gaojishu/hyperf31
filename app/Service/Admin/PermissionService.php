@@ -64,7 +64,7 @@ class PermissionService
         return $permission->delete();
     }
 
-    public function findByCode(string $code): Permission
+    public function findByCode(string $code): ?Permission
     {
         $permission = Permission::where('code', $code)->first();
         return $permission;
