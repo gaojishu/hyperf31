@@ -135,12 +135,23 @@ class AdminService
         return $admin;
     }
 
-    public function findPermissionByadmin_id(?int $admin_id)
+    public function findPermissionByadminId(?int $admin_id)
     {
         $admin = Admin::find($admin_id);
         if (! $admin) {
             return null;
         }
         return $admin->permission;
+    }
+
+    public function findPermissionByadminIdAndCode(?int $admin_id, string $code)
+    {
+        //查询当前用户 关联的权限，查询条件 adminid  and code
+        $admin = Admin::where('id', $admin_id)
+            ->whereHas('permission', function ($query) use ($code) {
+                $query->where('code', $code);
+            })->first();
+
+        return $admin;
     }
 }

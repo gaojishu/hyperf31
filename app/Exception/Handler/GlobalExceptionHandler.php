@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Exception\Handler;
 
 use App\Exception\BusinessException;
-use App\Util\HttpResponse\HttpResponse;
+use App\Util\HttpResponse\HttpResponseData;
 use Hyperf\ExceptionHandler\ExceptionHandler;
 use Hyperf\HttpMessage\Stream\SwooleStream;
 use Psr\Http\Message\ResponseInterface;
@@ -13,14 +13,13 @@ use Throwable;
 
 class GlobalExceptionHandler extends ExceptionHandler
 {
-    use HttpResponse;
     public function handle(Throwable $throwable, ResponseInterface $response)
     {
         // 处理 BusinessException
         if ($throwable instanceof BusinessException) {
 
             // 构造统一响应格式
-            $data = $this->apidata($throwable->getMessage(), $throwable->getCode());
+            $data = HttpResponseData::apidata($throwable->getMessage(), $throwable->getCode());
 
             // 返回 JSON 响应
             return $response
@@ -31,7 +30,7 @@ class GlobalExceptionHandler extends ExceptionHandler
 
         if ($throwable instanceof \Hyperf\Validation\ValidationException) {
             // 构造统一响应格式
-            $data = $this->setData($throwable->validator->errors()->getMessages())->apidata($throwable->validator->errors()->first(), 400);
+            $data = HttpResponseData::apidata($throwable->validator->errors()->first(), 400);
 
             // 响应
             return $response

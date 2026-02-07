@@ -6,7 +6,6 @@ namespace App\Util\Auth;
 
 use App\Model\Admin\Admin;
 use Carbon\Carbon;
-use Hyperf\Context\Context;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\Redis\Redis;
 use Psr\Container\ContainerInterface;
@@ -55,16 +54,21 @@ class AuthGuard
         ];
     }
 
-    public function getUserIdByToken(string $token): ?int
+    public function getUserId(): ?int
     {
+        $token = get_request_token();
+        if (!$token) {
+            return null;
+        }
+
         $redis = $this->redis;
         $userId = $redis->get($this->tokenKey($token));
         return $userId ? (int) $userId : null;
     }
 
-    public function getUserByToken(string $token): mixed
+    public function getUserByToken(): mixed
     {
-        $userId = $this->getUserIdByToken($token);
+        $userId = $this->getUserId();
         if (!$userId) {
             return null;
         }
@@ -72,9 +76,9 @@ class AuthGuard
         return $this->findUserById($userId);
     }
 
-    public function validateToken(string $token): bool
+    public function validateToken(): bool
     {
-        return $this->getUserIdByToken($token) !== null;
+        return $this->getUserId() !== null;
     }
 
     public function invalidateToken(string $token): bool

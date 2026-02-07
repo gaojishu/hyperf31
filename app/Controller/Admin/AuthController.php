@@ -57,7 +57,7 @@ class AuthController extends BaseController
         if ($admin_id == 1) {
             $result = $this->permissionService->findAll();
         } else {
-            $result = $this->adminService->findPermissionByadmin_id($admin_id);
+            $result = $this->adminService->findPermissionByadminId($admin_id);
         }
 
         return $this->setData($result)->apisucceed();

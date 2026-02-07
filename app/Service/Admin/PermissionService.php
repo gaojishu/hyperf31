@@ -53,7 +53,7 @@ class PermissionService
     {
         $permission = Permission::where('id', $id)->first();
 
-        if(!$permission){
+        if (!$permission) {
             return true;
         }
         $children = Permission::where('parent_id', $id)->first();
@@ -62,5 +62,11 @@ class PermissionService
         }
 
         return $permission->delete();
+    }
+
+    public function findByCode(string $code): Permission
+    {
+        $permission = Permission::where('code', $code)->first();
+        return $permission;
     }
 }

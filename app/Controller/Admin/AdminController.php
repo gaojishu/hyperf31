@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller\Admin;
 
+use App\Annotation\PermissionAnnotation;
 use App\Service\Admin\AdminService;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Annotation\AutoController;
@@ -30,6 +31,7 @@ class AdminController extends BaseController
         return $this->apisucceed('操作成功');
     }
 
+    #[PermissionAnnotation('admin:page')]
     public function page(\App\Request\Admin\Admin\AdminPageRequest $request)
     {
         $data =  $this->adminService->page($request->validated());
