@@ -19,7 +19,7 @@ class AdminController extends BaseController
     #[Inject()]
     private AdminService $adminService;
 
-    #[PermissionAnnotation('admin:create')]
+    #[PermissionAnnotation('admin:create', '管理员创建')]
     public function create(\App\Request\Admin\Admin\AdminCreateRequest $request)
     {
 
@@ -28,7 +28,7 @@ class AdminController extends BaseController
         return $this->apisucceed('操作成功');
     }
 
-    #[PermissionAnnotation('admin:update')]
+    #[PermissionAnnotation('admin:update', '管理员更新')]
     public function update(\App\Request\Admin\Admin\AdminUpdateRequest $request)
     {
         $this->adminService->update($request->validated());
@@ -36,6 +36,7 @@ class AdminController extends BaseController
         return $this->apisucceed('操作成功');
     }
 
+    //#[PermissionAnnotation('admin:page', '管理员查询')]
     public function page(\App\Request\Admin\Admin\AdminPageRequest $request)
     {
         $data =  $this->adminService->page($request->validated());

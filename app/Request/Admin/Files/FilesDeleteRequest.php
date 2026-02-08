@@ -2,24 +2,27 @@
 
 declare(strict_types=1);
 
-namespace App\Request\Admin\Role;
+namespace App\Request\Admin\Files;
 
 use Hyperf\Validation\Request\FormRequest;
 
-class RoleStoreRequest extends FormRequest
+class FilesDeleteRequest extends FormRequest
 {
+    /**
+     * Determine if the user is authorized to make this request.
+     */
     public function authorize(): bool
     {
         return true;
     }
 
+    /**
+     * Get the validation rules that apply to the request.
+     */
     public function rules(): array
     {
         return [
-            'id' => '',
-            'name' => 'required|nullable|string|max:64',
-            'remark' => 'nullable|string|max:500',
-            'permission_key' => 'nullable|array',
+            'keys' => '',
         ];
     }
 

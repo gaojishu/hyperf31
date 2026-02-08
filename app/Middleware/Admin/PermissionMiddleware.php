@@ -9,7 +9,7 @@ use App\Exception\BusinessException;
 use App\Service\Admin\AdminActionService;
 use App\Service\Admin\AdminService;
 use App\Service\Admin\PermissionService;
-use App\Util\Auth\Auth;
+use App\Utils\Auth\Auth;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\HttpServer\Router\Dispatched;
 use Psr\Container\ContainerInterface;
@@ -41,8 +41,7 @@ class PermissionMiddleware implements MiddlewareInterface
         // 尝试从控制器方法获取 PermissionAnnotation 注解
         $annotation = $this->getAnnotation($dispatched);
 
-
-        $hasPermission = $this->checkPermission($annotation?->code, $request);
+        $hasPermission = $this->checkPermission($annotation?->code, $annotation?->remark, $request);
 
         if (!$hasPermission) {
             throw new BusinessException(403, '无权限.');
@@ -61,7 +60,7 @@ class PermissionMiddleware implements MiddlewareInterface
         return null;
     }
 
-    private function checkPermission(?string $code, ServerRequestInterface $request): bool
+    private function checkPermission(?string $code, ?string $remark, ServerRequestInterface $request): bool
     {
 
         // 这里编写实际的权限判断逻辑
@@ -81,7 +80,7 @@ class PermissionMiddleware implements MiddlewareInterface
             'path'          => $request->getUri()->getPath(),                              // 获取 URI
             'params'       => $request->getParsedBody() ?: null,                     // 获取所有参数
             'query_params' => $request->getQueryParams() ?: null,                   // 获取查询参数
-            'remark'       => $permission?->name,
+            'remark'       => $remark || $permission?->name,
         ]);
 
         //超级管理员id   不检查权限

@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Model\Admin;
 
+use App\Enum\Admin\Files\FilesTypeEnum;
 use App\Model\BaseModel;
+use App\Utils\Aliyun\OssUtil;
 
 /**
  * @property int $id 
@@ -31,4 +33,11 @@ class Files extends BaseModel
      * The attributes that are mass assignable.
      */
     protected array $fillable = [];
+
+    protected array $casts = ['type' => FilesTypeEnum::class];
+
+    public function getKeyAttribute($value)
+    {
+        return OssUtil::generatePresignedUrl($value);
+    }
 }

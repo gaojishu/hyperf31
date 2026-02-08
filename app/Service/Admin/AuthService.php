@@ -6,7 +6,7 @@ namespace App\Service\Admin;
 
 use App\Exception\BusinessException;
 use App\Model\Admin\Admin;
-use App\Util\Auth\Auth;
+use App\Utils\Auth\Auth;
 
 class AuthService
 {

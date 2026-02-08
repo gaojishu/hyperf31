@@ -1,5 +1,8 @@
 ### php环境要求
 参考官网 https://hyperf.wiki/3.1/#/zh-cn/quick-start/install
+```
+xlswriter 扩展 需要去除exec 禁用函数
+```
 # 安装
 ```
 composer install

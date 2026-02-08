@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Middleware\Admin;
 
 use App\Exception\BusinessException;
-use App\Util\Auth\Auth;
+use App\Utils\Auth\Auth;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;

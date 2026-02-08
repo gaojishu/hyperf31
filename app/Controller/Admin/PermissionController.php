@@ -22,30 +22,28 @@ class PermissionController extends BaseController
     #[Inject()]
     private PermissionService $permissionService;
 
-    #[PermissionAnnotation('permission:create')]
+    #[PermissionAnnotation('permission:create', '权限创建')]
     public function create(PermissionCreateRequest $request)
     {
         $this->permissionService->create($request->validated());
         return $this->apisucceed('操作成功');
     }
 
-    #[PermissionAnnotation('permission:update')]
+    #[PermissionAnnotation('permission:update', '权限更新')]
     public function update(PermissionUpdateRequest $request)
     {
         $this->permissionService->update($request->validated());
         return $this->apisucceed('操作成功');
     }
 
-    #[PermissionAnnotation('permission:delete')]
+    #[PermissionAnnotation('permission:delete', '权限删除')]
     public function delete(RequestInterface $request)
     {
         $this->permissionService->delete((int) $request->query('id'));
         return $this->apisucceed('操作成功');
     }
 
-    /**
-     * 获取全部权限
-     */
+    //#[PermissionAnnotation('permission:read', '权限查询')]
     public function records()
     {
         $data = $this->permissionService->findAll();

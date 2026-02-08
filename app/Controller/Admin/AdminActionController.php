@@ -19,7 +19,7 @@ class AdminActionController extends BaseController
     #[Inject()]
     private AdminActionService $adminActionService;
 
-    #[PermissionAnnotation('adminAction:page')]
+    #[PermissionAnnotation('adminAction:page', '日志查询')]
     public function page(\App\Request\Admin\AdminAction\AdminActionPageRequest $request)
     {
         $data =  $this->adminActionService->page($request->validated());

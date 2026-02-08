@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Util\HttpResponse;
+namespace App\Utils\HttpResponse;
 
-use App\Util\Auth\Auth;
+use App\Utils\Auth\Auth;
 use Hyperf\HttpServer\Contract\RequestInterface;
 use Hyperf\HttpServer\Contract\ResponseInterface;
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Service\Admin;
 
+use App\Enum\Admin\PermissionTypeEnum;
 use App\Exception\BusinessException;
 use App\Model\Admin\Permission;
 
@@ -20,11 +21,21 @@ class PermissionService
         foreach ($data as $key => $val) {
             $permission->$key = $val;
         }
+        $permission->type = PermissionTypeEnum::tryFrom($data['type']);
+        $permission->level = 1;
         $permission->save();
-        $p = Permission::where('parent_id', $data['parent_id'] ?? null)->first();
+
+        $p = null;
+        if ($data['parent_id'] ?? null) {
+            $p = Permission::where('parent_id', $data['parent_id'] ?? null)->first();
+        }
+
+
         if ($p) {
+            $permission->level = $p->level + 1;
             $permission->key = $p->key . '-' . $permission->id;
         } else {
+            $permission->level = 1;
             $permission->key = $permission->id;
         }
         $permission->save();
@@ -40,10 +51,18 @@ class PermissionService
         foreach ($data as $key => $val) {
             $permission->$key = $val;
         }
-        $p = Permission::where('parent_id', $data['parent_id'])->first();
+        $permission->type = PermissionTypeEnum::tryFrom($data['type']);
+
+        $p = null;
+        if ($data['parent_id'] ?? null) {
+            $p = Permission::where('parent_id', $data['parent_id'] ?? null)->first();
+        }
+
         if ($p) {
+            $permission->level = $p->level + 1;
             $permission->key = $p->key . '-' . $permission->id;
         } else {
+            $permission->level = 1;
             $permission->key = $permission->id;
         }
         $permission->save();

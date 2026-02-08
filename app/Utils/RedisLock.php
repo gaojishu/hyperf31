@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Util;
+namespace App\Utils;
 
 use Hyperf\Context\ApplicationContext;
 use Hyperf\Redis\Redis;

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Util\HttpResponse;
+namespace App\Utils\HttpResponse;
 
 use Hyperf\Context\Context;
 use Ramsey\Uuid\Uuid;

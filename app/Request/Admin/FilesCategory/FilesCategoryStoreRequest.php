@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Request\Admin\Role;
+namespace App\Request\Admin\FilesCategory;
 
 use Hyperf\Validation\Request\FormRequest;
 
-class RoleStoreRequest extends FormRequest
+class FilesCategoryStoreRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -19,7 +19,6 @@ class RoleStoreRequest extends FormRequest
             'id' => '',
             'name' => 'required|nullable|string|max:64',
             'remark' => 'nullable|string|max:500',
-            'permission_key' => 'nullable|array',
         ];
     }
 

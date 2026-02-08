@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Exception\Handler;
 
 use App\Exception\BusinessException;
-use App\Util\HttpResponse\HttpResponseData;
+use App\Utils\HttpResponse\HttpResponseData;
 use Hyperf\ExceptionHandler\ExceptionHandler;
 use Hyperf\HttpMessage\Stream\SwooleStream;
 use Psr\Http\Message\ResponseInterface;
