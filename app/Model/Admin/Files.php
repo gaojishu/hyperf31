@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Model\Admin;
 
 use App\Enum\Admin\Files\FilesTypeEnum;
-use App\Model\BaseModel;
 use App\Utils\Aliyun\OssUtil;
 
 /**

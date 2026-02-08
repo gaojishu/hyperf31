@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Model\Admin;
 
 use App\Enum\Admin\AdminDisabledStatusEnum;
-use App\Model\BaseModel;
 
 /**
  * @property int $id 

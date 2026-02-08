@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Model\Admin;
 
-use App\Model\BaseModel;
-
 /**
  * @property int $id 
  * @property \Carbon\Carbon $created_at 
