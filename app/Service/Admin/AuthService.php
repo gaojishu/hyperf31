@@ -15,7 +15,7 @@ class AuthService
         $admin = Admin::where('username', $data['username'])->first();
 
         if (!$admin || !password_verify($data['password'], $admin->password)) {
-            throw new BusinessException(401, '用户名或密码错误');
+            throw new BusinessException('用户名或密码错误');
         }
 
         // 生成token

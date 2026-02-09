@@ -44,7 +44,7 @@ class PermissionMiddleware implements MiddlewareInterface
         $hasPermission = $this->checkPermission($annotation?->code, $annotation?->remark, $request);
 
         if (!$hasPermission) {
-            throw new BusinessException(403, '无权限.');
+            throw new BusinessException('无权限.', 403);
         }
 
         return $handler->handle($request);
@@ -80,7 +80,7 @@ class PermissionMiddleware implements MiddlewareInterface
             'path'          => $request->getUri()->getPath(),                              // 获取 URI
             'params'       => $request->getParsedBody() ?: null,                     // 获取所有参数
             'query_params' => $request->getQueryParams() ?: null,                   // 获取查询参数
-            'remark'       => $remark || $permission?->name,
+            'remark'       => $remark ?? $permission?->name,
         ]);
 
         //超级管理员id   不检查权限

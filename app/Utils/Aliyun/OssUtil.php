@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Utils\Aliyun;
 
+use App\Enum\Admin\Files\FilesTypeEnum;
 use Carbon\Carbon;
 use Hyperf\Context\ApplicationContext;
 use Ramsey\Uuid\Uuid;
@@ -119,9 +120,14 @@ class OssUtil
 
         $type = explode('/', $mimeType)[0];
 
+        $fileType = FilesTypeEnum::tryFrom($type);
+
+        $fileType = $fileType ? $fileType->value : FilesTypeEnum::OHTER->value;
+
+
         $currentDate = Carbon::now()->format('Ymd');;
         $uuid = Uuid::uuid4();
 
-        return "upload/{$type}/{$currentDate}/{$uuid}.{$extension}";
+        return "upload/{$fileType}/{$currentDate}/{$uuid}.{$extension}";
     }
 }

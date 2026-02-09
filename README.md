@@ -2,6 +2,11 @@
 参考官网 https://hyperf.wiki/3.1/#/zh-cn/quick-start/install
 ```
 xlswriter 扩展 需要去除exec 禁用函数
+ide 提示
+composer require viest/php-ext-xlswriter-ide-helper:dev-master --dev
+
+
+websocket  socketio 比较老旧，暂无很好的方案
 ```
 # 安装
 ```
@@ -48,9 +53,15 @@ composer test test/Unit/ExampleTest.php 指定文件
 
 # 常用命令
 ```
-php bin/hyperf.php gen:model admin --path=app/Model/Admin
+php bin/hyperf.php gen:model admin_notice --path=app/Model/Admin
 
 php bin/hyperf.php gen:middleware CorsMiddleware
+
+
+
+ php bin/hyperf.php gen:amqp-producer AdminActionProducer
+ php bin/hyperf.php gen:amqp-consumer AdminActionConsumer
+
 
 ```
 

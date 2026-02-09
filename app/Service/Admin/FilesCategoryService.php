@@ -36,7 +36,7 @@ class FilesCategoryService
     {
         $file = Files::where('category_id', $id)->first();
         if ($file) {
-            throw new BusinessException(500, '删除失败，此分类下有文件');
+            throw new BusinessException('删除失败，此分类下有文件');
         }
         FilesCategory::query()->where('id', $id)->delete();
     }

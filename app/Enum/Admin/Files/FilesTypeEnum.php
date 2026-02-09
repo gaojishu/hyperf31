@@ -9,6 +9,7 @@ enum FilesTypeEnum: string
     case VIDEO  = 'video';
     case IMAGE = 'image';
     case AUDIO = 'audio';
+    case OHTER = 'ohter';
 
     /**
      * 获取状态标签（中文描述）
@@ -19,6 +20,7 @@ enum FilesTypeEnum: string
             self::VIDEO  => '视频',
             self::IMAGE => '图片',
             self::AUDIO => '音频',
+            self::OHTER => '其他',
         };
     }
 

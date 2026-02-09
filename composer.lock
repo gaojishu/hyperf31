@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fb5024dde0d3710b19d3760b70949256",
+    "content-hash": "6d5b131ceace56015c71afc11ef10ded",
     "packages": [
         {
             "name": "aliyuncs/oss-sdk-php",
@@ -4218,6 +4218,77 @@
                 }
             ],
             "time": "2026-01-25T01:46:18+00:00"
+        },
+        {
+            "name": "hyperf/websocket-server",
+            "version": "v3.1.63",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/hyperf/websocket-server.git",
+                "reference": "5c53c8a3d946f76d9363e0d2ca7e0ca81ac477fd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/hyperf/websocket-server/zipball/5c53c8a3d946f76d9363e0d2ca7e0ca81ac477fd",
+                "reference": "5c53c8a3d946f76d9363e0d2ca7e0ca81ac477fd",
+                "shasum": ""
+            },
+            "require": {
+                "hyperf/collection": "~3.1.0",
+                "hyperf/context": "~3.1.0",
+                "hyperf/contract": "~3.1.0",
+                "hyperf/coordinator": "~3.1.0",
+                "hyperf/engine": "^2.0",
+                "hyperf/exception-handler": "~3.1.0",
+                "hyperf/http-server": "~3.1.0",
+                "hyperf/support": "~3.1.0",
+                "php": ">=8.1",
+                "psr/container": "^1.0 || ^2.0",
+                "psr/event-dispatcher": "^1.0"
+            },
+            "type": "library",
+            "extra": {
+                "hyperf": {
+                    "config": "Hyperf\\WebSocketServer\\ConfigProvider"
+                },
+                "branch-alias": {
+                    "dev-master": "3.1-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Hyperf\\WebSocketServer\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "A websocket server library for Hyperf.",
+            "homepage": "https://hyperf.io",
+            "keywords": [
+                "hyperf",
+                "php",
+                "swoole",
+                "websocket"
+            ],
+            "support": {
+                "docs": "https://hyperf.wiki",
+                "issues": "https://github.com/hyperf/hyperf/issues",
+                "pull-request": "https://github.com/hyperf/hyperf/pulls",
+                "source": "https://github.com/hyperf/hyperf"
+            },
+            "funding": [
+                {
+                    "url": "https://hyperf.wiki/#/zh-cn/donate",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://opencollective.com/hyperf",
+                    "type": "open_collective"
+                }
+            ],
+            "time": "2025-10-30T01:44:44+00:00"
         },
         {
             "name": "jetbrains/phpstorm-attributes",
@@ -11966,6 +12037,47 @@
             "time": "2025-11-17T20:03:58+00:00"
         },
         {
+            "name": "viest/php-ext-xlswriter-ide-helper",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/viest/php-ext-xlswriter-ide-helper.git",
+                "reference": "31fa3849f938bafc3a87be96d96800312999c79d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/viest/php-ext-xlswriter-ide-helper/zipball/31fa3849f938bafc3a87be96d96800312999c79d",
+                "reference": "31fa3849f938bafc3a87be96d96800312999c79d",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Vtiful\\Kernel\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "viest",
+                    "email": "wjx@php.net"
+                }
+            ],
+            "description": "PHP Extension Xlswriter IDE Helper",
+            "support": {
+                "issues": "https://github.com/viest/php-ext-xlswriter-ide-helper/issues",
+                "source": "https://github.com/viest/php-ext-xlswriter-ide-helper/tree/master"
+            },
+            "time": "2022-06-21T02:34:45+00:00"
+        },
+        {
             "name": "webmozart/assert",
             "version": "2.1.2",
             "source": {
@@ -12030,7 +12142,9 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": {},
+    "stability-flags": {
+        "viest/php-ext-xlswriter-ide-helper": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

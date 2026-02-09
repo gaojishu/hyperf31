@@ -11,7 +11,10 @@
 
 use Hyperf\HttpServer\Router\Router;
 
-Router::addRoute(['GET', 'POST', 'HEAD'], '/', 'App\Controller\IndexController@index');
+
+Router::addServer('ws', function () {
+    Router::get('/', \App\Controller\Admin\WebSocketController::class);
+});
 
 Router::get('/favicon.ico', function () {
     return '';

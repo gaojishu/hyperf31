@@ -45,7 +45,7 @@ class PermissionService
     {
         $permission = Permission::where('id', $data['id'] ?? null)->first();
         if (! $permission) {
-            throw new BusinessException(500, '权限不存在');
+            throw new BusinessException('权限不存在');
         }
         unset($data['id']);
         foreach ($data as $key => $val) {
@@ -77,7 +77,7 @@ class PermissionService
         }
         $children = Permission::where('parent_id', $id)->first();
         if ($children) {
-            throw new BusinessException(500, '权限下有子权限，不能删除');
+            throw new BusinessException('权限下有子权限，不能删除');
         }
 
         return $permission->delete();

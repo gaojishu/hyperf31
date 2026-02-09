@@ -103,7 +103,7 @@ class AdminService
 
             $admin = Admin::where('id', $data['id'])->first();
             if (! $admin) {
-                throw new BusinessException(500, '数据不存在');
+                throw new BusinessException('数据不存在');
             }
             unset($data['id']);
             foreach ($data as $key => $value) {

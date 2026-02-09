@@ -5,11 +5,10 @@ declare(strict_types=1);
 namespace App\Service\Admin;
 
 use App\Enum\Admin\SortEnum;
-use App\Model\Admin\AdminAction;
+use App\Model\Admin\Notice;
 
-class AdminActionService
+class NoticeService
 {
-    const FIELD = ['admin_id', 'duration', 'ip', 'method', 'remark', 'path', 'params', 'query_params',];
 
     public function queryWhere(array $data)
     {
@@ -17,20 +16,13 @@ class AdminActionService
         $params = $data['params'] ?? [];
         $sort = $data['sort'] ?? [];
 
-        $query = AdminAction::query();
+        $query = Notice::query();
 
         $query->when($params['id'] ?? null, function ($query, $id) {
             $query->where('id', $id);
         }) // 筛选：用户名 模糊匹配 (修正了你代码中的 filter 错误)
-            ->when($params['method'] ?? null, function ($query, $method) {
-                $query->where('method', 'like', "%{$method}%");
-            })
-            // 筛选：昵称 模糊匹配
-            ->when($params['path'] ?? null, function ($query, $path) {
-                $query->where('path', 'like', "%{$path}%");
-            })
-            ->when($params['ip'] ?? null, function ($query, $ip) {
-                $query->where('ip', 'like', "%{$ip}%");
+            ->when($params['title'] ?? null, function ($query, $title) {
+                $query->where('title', 'like', "%{$title}%");
             })
             ->when($params['created_at'] ?? null, function ($query, $created_at) {
                 $query->whereBetween('created_at', $created_at);
@@ -68,16 +60,14 @@ class AdminActionService
         return $query->paginate($pagesize, ['*'], 'params.current');
     }
 
-    public function create(array $data)
+    public function create(int $admin_id, string $title, string $content, ?array $att): Notice
     {
-        $admin = new AdminAction();
-
-        foreach ($data as $key => $value) {
-            if (in_array($key, self::FIELD)) {
-                $admin->$key = $value;
-            }
-        }
-
-        $admin->save();
+        $notice = new Notice();
+        $notice->admin_id = $admin_id;
+        $notice->title = $title;
+        $notice->content = $content;
+        $notice->attachments = $att;
+        $notice->save();
+        return $notice;
     }
 }

@@ -15,4 +15,7 @@ return [
         \Hyperf\Validation\Middleware\ValidationMiddleware::class,
 
     ],
+    'ws' => [
+        \App\Middleware\Admin\AuthMiddleware::class
+    ]
 ];
