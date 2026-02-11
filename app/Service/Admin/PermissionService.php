@@ -27,7 +27,7 @@ class PermissionService
 
         $p = null;
         if ($data['parent_id'] ?? null) {
-            $p = Permission::where('parent_id', $data['parent_id'] ?? null)->first();
+            $p = Permission::where('id', $data['parent_id'] ?? null)->first();
         }
 
 
@@ -55,7 +55,7 @@ class PermissionService
 
         $p = null;
         if ($data['parent_id'] ?? null) {
-            $p = Permission::where('parent_id', $data['parent_id'] ?? null)->first();
+            $p = Permission::where('id', $data['parent_id'] ?? null)->first();
         }
 
         if ($p) {

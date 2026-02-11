@@ -4,21 +4,22 @@ declare(strict_types=1);
 
 namespace App\Service\Admin;
 
-use App\Amqp\Producer\AdminActionExportProducer;
+use App\Amqp\Producer\AsyncJobExportProducer;
 use App\Enum\Admin\AsycnJob\AsyncJobQueueEnum;
 use App\Enum\Admin\SortEnum;
-use App\Model\Admin\AdminAction;
+use App\Event\AsyncJobCreateOrRetryEvent;
+use App\Model\Admin\AsyncJob;
 use App\Utils\Auth\Auth;
+use Carbon\Carbon;
 use Hyperf\DbConnection\Db;
 use Hyperf\Di\Annotation\Inject;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Ramsey\Uuid\Uuid;
 
-class AdminActionService
+class AsyncJobService
 {
     #[Inject()]
-    private AsyncJobService $asyncJobService;
-
-    const FIELD = ['admin_id', 'duration', 'ip', 'method', 'remark', 'path', 'params', 'query_params',];
+    private EventDispatcherInterface $eventDispatcher;
 
     public function queryWhere(array $data)
     {
@@ -26,20 +27,19 @@ class AdminActionService
         $params = $data['params'] ?? [];
         $sort = $data['sort'] ?? [];
 
-        $query = AdminAction::query();
+        $query = AsyncJob::query();
 
         $query->when($params['id'] ?? null, function ($query, $id) {
             $query->where('id', $id);
         }) // 筛选：用户名 模糊匹配 (修正了你代码中的 filter 错误)
-            ->when($params['method'] ?? null, function ($query, $method) {
-                $query->where('method', 'like', "%{$method}%");
+            ->when($params['queue'] ?? null, function ($query, $queue) {
+                $query->where('queue', 'like', "%{$queue}%");
             })
-            // 筛选：昵称 模糊匹配
-            ->when($params['path'] ?? null, function ($query, $path) {
-                $query->where('path', 'like', "%{$path}%");
+            ->when($params['job_class'] ?? null, function ($query, $job_class) {
+                $query->where('job_class', 'like', "%{$job_class}%");
             })
-            ->when($params['ip'] ?? null, function ($query, $ip) {
-                $query->where('ip', 'like', "%{$ip}%");
+            ->when($params['status'] ?? null, function ($query, $status) {
+                $query->where('status', $status);
             })
             ->when($params['created_at'] ?? null, function ($query, $created_at) {
                 $query->whereBetween('created_at', $created_at);
@@ -70,18 +70,17 @@ class AdminActionService
         // 2. 分页大小限制 (1-20 范围)
         $pagesize = (int)($params['page_size'] ?? 10);
         $pagesize = max(1, min($pagesize, 20));
-        $page = $params['current'] ?? 1;
 
         $query = $this->queryWhere($data);
 
 
-        return $query->paginate($pagesize, ['*'], '', $page);
+        return $query->paginate($pagesize, ['*'], 'params.current');
     }
 
-    public function exportProducer(array $data)
+    public function export(array $data)
     {
         Db::transaction(function () use ($data) {
-            $className = AdminActionExportProducer::class;
+            $className = AsyncJobExportProducer::class;
 
             $uuid = Uuid::uuid4()->toString();
             $payload = [
@@ -89,7 +88,7 @@ class AdminActionService
                 'params' => $data,
                 'uuid' => $uuid
             ];
-            $this->asyncJobService->create(
+            $this->create(
                 payload: $payload,
                 queue: AsyncJobQueueEnum::AMQP,
                 job_class: $className,
@@ -98,16 +97,24 @@ class AdminActionService
         });
     }
 
-    public function create(array $data)
-    {
-        $admin = new AdminAction();
-
-        foreach ($data as $key => $value) {
-            if (in_array($key, self::FIELD)) {
-                $admin->$key = $value;
-            }
+    public function create(
+        array $payload,
+        AsyncJobQueueEnum $queue,
+        string $job_class,
+        string $uuid,
+        ?string $available_at = null
+    ): AsyncJob {
+        $job = new AsyncJob();
+        $job->available_at = $available_at;
+        if (!$available_at) {
+            $job->available_at = Carbon::now()->toDateTimeString();
         }
-
-        $admin->save();
+        $job->queue = $queue;
+        $job->payload = $payload;
+        $job->job_class = $job_class;
+        $job->uuid = $uuid;
+        $job->save();
+        $this->eventDispatcher->dispatch(new AsyncJobCreateOrRetryEvent($job));
+        return $job;
     }
 }

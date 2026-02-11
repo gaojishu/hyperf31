@@ -26,6 +26,8 @@ class NoticePageRequest extends FormRequest
             'params.title' => '',
             'params.created_at' => '',
             'params.updated_at' => '',
+            'params.current' => '',
+            'params.page_size' => '',
             'sort.id' => '',
         ];
     }

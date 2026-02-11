@@ -7,7 +7,7 @@ namespace App\Amqp\Consumer;
 use App\Enum\Admin\AsycnJob\AsyncJobStatusEnum;
 use App\Exception\BusinessException;
 use App\Model\Admin\AsyncJob;
-use App\Service\Admin\Action\AdminActionExport;
+use App\Service\Admin\Action\AsyncJobExport;
 use Carbon\Carbon;
 use Hyperf\Amqp\Result;
 use Hyperf\Amqp\Annotation\Consumer;
@@ -16,8 +16,8 @@ use Hyperf\Context\ApplicationContext;
 use Hyperf\DbConnection\Db;
 use PhpAmqpLib\Message\AMQPMessage;
 
-#[Consumer(exchange: 'amdin.action.export.direct', routingKey: 'amdin.action.export', queue: 'amdin.action.export.que', name: "AdminActionConsumer", nums: 1)]
-class AdminActionExportConsumer extends ConsumerMessage
+#[Consumer(exchange: 'async.job.export.direct', routingKey: 'async.job.export', queue: 'async.job.export.que', name: "AdminActionConsumer", nums: 1)]
+class AsyncJobExportConsumer extends ConsumerMessage
 {
     public function consumeMessage($data, AMQPMessage $message): Result
     {
@@ -63,7 +63,7 @@ class AdminActionExportConsumer extends ConsumerMessage
             }
 
             // 2. 执行耗时业务逻辑（脱离事务执行，避免长时间占用数据库连接）
-            $handler = ApplicationContext::getContainer()->get(AdminActionExport::class);
+            $handler = ApplicationContext::getContainer()->get(AsyncJobExport::class);
             $result = $handler->handle($data);
 
             // 3. 成功更新

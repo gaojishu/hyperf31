@@ -9,11 +9,11 @@ use Hyperf\Amqp\Message\ProducerMessage;
 
 #[
     Producer(
-        exchange: 'amdin.action.export.direct',
-        routingKey: 'amdin.action.export'
+        exchange: 'async.job.export.direct',
+        routingKey: 'async.job.export'
     )
 ]
-class AdminActionExportProducer extends ProducerMessage
+class AsyncJobExportProducer extends ProducerMessage
 {
     public function __construct(array $data)
     {

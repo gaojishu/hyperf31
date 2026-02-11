@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Request\Admin\AdminAction;
+namespace App\Request\Admin\AsyncJob;
 
 use Hyperf\Validation\Request\FormRequest;
 
-class AdminActionPageRequest extends FormRequest
+class AsyncJobPageRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,10 +23,9 @@ class AdminActionPageRequest extends FormRequest
     {
         return [
             'params.id' => '',
-            'params.method' => '',
-            'params.ip' => '',
-            'params.path' => '',
-            'params.remark' => '',
+            'params.queue' => '',
+            'params.job_class' => '',
+            'params.status' => '',
             'params.created_at' => '',
             'params.updated_at' => '',
             'params.current' => '',

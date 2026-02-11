@@ -25,6 +25,8 @@ class FilesPageRequest extends FormRequest
             'params.category_id' => '',
             'params.type' => '',
             'params.created_at' => '',
+            'params.current' => '',
+            'params.page_size' => '',
             'sort.id' => '',
         ];
     }
